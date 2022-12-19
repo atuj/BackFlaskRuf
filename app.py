@@ -20,7 +20,7 @@ def index():
     valueresult = cur.fetchall()
     cur.close()
     conn.close()
-    return valueresult
+    return {"hum":valueresult[0][0]}
 
 @app.route('/pgetpass')
 def pavelgetpass():
