@@ -1,4 +1,5 @@
 import psycopg2
+import json
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
@@ -31,3 +32,25 @@ def pavelgetpass():
     cur.close()
     conn.close()
     return {"password":passresult[0][0]}
+
+@app.route('/pgetusers')
+def pavelgetusers():
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('select * from getusertable()')
+    passresult = cur.fetchall()
+    cur.close()
+    conn.close()
+    data = [{'Login':item[0],'Password':item[1]} for i, item in enumerate(passresult)]
+    return data
+
+@app.route('/pgettemp')
+def pavelgettemp():
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('select gettemperature()')
+    passresult = cur.fetchall()
+    cur.close()
+    conn.close()
+    data = [{'value':item[0].replace("(","").replace(")","").split(",")[0],'date':item[0].replace("(","").replace(")","").split(",")[1]} for i, item in enumerate(passresult)]
+    return data
